@@ -1,4 +1,4 @@
-# aws-sam-pipeline-notification
+# aws-sam-notification-service-pipeline
 
 **This is an example of how to create a minimal pipeline for SAM based Serverless Apps**
 
@@ -24,20 +24,20 @@ aws ssm put-parameter \
     --value "premananthdivya@gmail.com"
 
 aws ssm put-parameter \
-    --name "/service/aws-sam-pipeline-notification/github/token" \
-    --description "Github Token for Cloudformation Stack aws-sam-pipeline-notification" \
+    --name "/service/aws-sam-notification-service-pipeline/github/token" \
+    --description "Github Token for Cloudformation Stack aws-sam-notification-service-pipeline" \
     --type "String" \
     --value ""
 
 aws ssm put-parameter \
-    --name "/service/aws-sam-pipeline-notification/github/user" \
-    --description "Github Username for Cloudformation Stack aws-sam-pipeline-notification" \
+    --name "/service/aws-sam-notification-service-pipeline/github/user" \
+    --description "Github Username for Cloudformation Stack aws-sam-notification-service-pipeline" \
     --type "String" \
     --value ""
 
 ```
 
-**NOTE:** Keep in mind that these Parameters will only be available within the same region you're deploying this Pipeline stack. Also, if these values ever change you will need to [update these parameters](https://docs.aws.amazon.com/cli/latest/reference/ssm/put-parameter.html) as well as update the "aws-sam-pipeline-notification" Cloudformation stack.
+**NOTE:** Keep in mind that these Parameters will only be available within the same region you're deploying this Pipeline stack. Also, if these values ever change you will need to [update these parameters](https://docs.aws.amazon.com/cli/latest/reference/ssm/put-parameter.html) as well as update the "aws-sam-notification-service-pipeline" Cloudformation stack.
 
 ## Pipeline creation
 
@@ -91,7 +91,7 @@ Run the following AWS CLI command to create your first pipeline for your SAM bas
 
 ```bash
 aws cloudformation create-stack \
-    --stack-name aws-sam-pipeline-notification \
+    --stack-name aws-sam-notification-service-pipeline \
     --template-body file://pipeline.yaml \
     --capabilities CAPABILITY_NAMED_IAM
 ```
@@ -100,7 +100,7 @@ This may take a couple of minutes to complete, therefore give it a minute or two
 
 ```bash
 aws cloudformation describe-stacks \
-    --stack-name aws-sam-pipeline-notification \
+    --stack-name aws-sam-notification-service-pipeline \
     --query 'Stacks[].Outputs'
 ```
 
