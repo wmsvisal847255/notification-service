@@ -14,7 +14,7 @@
 
 This Pipeline is configured to look up for GitHub information stored on [EC2 System Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) such as Branch, Repo, Username and OAuth Token.
 
-Replace the placeholders with values corresponding to your GitHub Repo and Token:
+Replace the placeholders with values corresponding to your GitHub Repo and Token: 
 
 ```bash
 aws ssm put-parameter \
