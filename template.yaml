@@ -10,99 +10,31 @@ Parameters:
       - staging
       - prod
     Description: Environment of this stack of resources
+  SNSTopicName:
+    Type: String
+    Description: Name of the sns topic
+    Default: "fail-notifier"
 
-  FromMailIdentityName: 
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: FromMailIdentityName
-
-  ToMailIdentityName: 
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: ToMailIdentityName
-
-Mappings:
-  ResourcesName:
-    dev:
-      bookingArn: BookingTripDevArn
-      paymentArn: PaymentDevArn
-      offerArn: OfferDevArn
-    staging:
-      bookingArn: BookingTripStagingArn
-      paymentArn: PaymentStagingArn
-      offerArn: OfferStagingArn
-    prod:
-      bookingArn: BookingTripProdArn
-      paymentArn: PaymentProdArn
-      offerArn: OfferProdArn
+# Mappings:
+#   ResourcesName:
+#     dev:
+#       bookingArn: BookingTripDevArn
+#       paymentArn: PaymentDevArn
+#       offerArn: OfferDevArn
+#     staging:
+#       bookingArn: BookingTripStagingArn
+#       paymentArn: PaymentStagingArn
+#       offerArn: OfferStagingArn
+#     prod:
+#       bookingArn: BookingTripProdArn
+#       paymentArn: PaymentProdArn
+#       offerArn: OfferProdArn
 
 Resources:
-  SendBookingEmailFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: app.sendBookingEmail
-      Runtime: nodejs12.x
-      CodeUri: notification/
-      Environment:
-        Variables:
-          FROM_EMAIL_ADDRESS: !Ref FromMailIdentityName
-          TO_EMAIL_ADDRESS: !Ref ToMailIdentityName
-      Policies:
-        - SESCrudPolicy:
-            IdentityName: !Ref FromMailIdentityName
-        - SESCrudPolicy:
-            IdentityName: !Ref ToMailIdentityName
-      Events:
-        Stream:
-          Type: DynamoDB
-          Properties:
-            Stream:               
-              Fn::ImportValue: !FindInMap [ResourcesName, !Ref Environment, bookingArn]
-            BatchSize: 1
-            StartingPosition: LATEST
-
-  SendPaymentEmailFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: app.sendPaymentEmail
-      Runtime: nodejs12.x
-      CodeUri: notification/
-      Environment:
-        Variables:
-          FROM_EMAIL_ADDRESS: !Ref FromMailIdentityName
-          TO_EMAIL_ADDRESS: !Ref ToMailIdentityName
-      Policies:
-        - SESCrudPolicy:
-            IdentityName: !Ref FromMailIdentityName
-        - SESCrudPolicy:
-            IdentityName: !Ref ToMailIdentityName
-      Events:
-        Stream:
-          Type: DynamoDB
-          Properties:
-            Stream:               
-              Fn::ImportValue: !FindInMap [ResourcesName, !Ref Environment, paymentArn]
-            BatchSize: 1
-            StartingPosition: LATEST
-
-  SendOfferEmailFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: app.sendOfferEmail
-      Runtime: nodejs12.x
-      CodeUri: notification/
-      Environment:
-        Variables:
-          FROM_EMAIL_ADDRESS: !Ref FromMailIdentityName
-          TO_EMAIL_ADDRESS: !Ref ToMailIdentityName
-      Policies:
-        - SESCrudPolicy:
-            IdentityName: !Ref FromMailIdentityName
-        - SESCrudPolicy:
-            IdentityName: !Ref ToMailIdentityName
-      Events:
-        Stream:
-          Type: DynamoDB
-          Properties:
-            Stream:               
-              Fn::ImportValue: !FindInMap [ResourcesName, !Ref Environment, offerArn]
-            BatchSize: 1
-            StartingPosition: LATEST
+  SNSNotifier:
+    Type: AWS::SNS::Topic
+    Properties: 
+      DisplayName: !Sub ${SNSTopicName}-${Environment} 
+      # Subscription: 
+      #   - Subscription
+      TopicName: !Sub ${SNSTopicName}-${AWS::AccountId}-${Environment} 
