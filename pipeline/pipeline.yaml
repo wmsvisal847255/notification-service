@@ -160,7 +160,7 @@ Resources:
                             }
                         ActionMode: CHANGE_SET_REPLACE
                         RoleArn: !GetAtt CloudFormationExecutionRole.Arn
-                        StackName: aws-sam-notification-service-pipeline
+                        StackName: aws-sam-notification-service-pipeline-dev
                         ChangeSetName: aws-sam-notification-service-pipeline-ChangeSet-dev
                         TemplatePath: BuildArtifactAsZip::packaged.yaml
                         Capabilities: CAPABILITY_IAM
