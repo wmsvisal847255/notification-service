@@ -57,8 +57,17 @@ Resources:
       Runtime: nodejs12.x
       CodeUri: notification-service/
 
+  LambdaPermissions:
+    Type: AWS::Lambda::Permission
+    Properties: 
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref NotifierFunction
+      Principal: !Sub ${AWS::AccountId}
+
   LogTrigger:
     Type: AWS::Logs::SubscriptionFilter
+    DependsOn: >-
+      LambdaPermissions
     Properties: 
       LogGroupName: /aws/lambda/post-authentication
       FilterPattern: '?ERROR'
