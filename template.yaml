@@ -60,14 +60,12 @@ Resources:
       Runtime: nodejs12.x
       CodeUri: notification-service/
 
-  LogGroupInvokeLambdaPermission:
-  Type: AWS::Lambda::Permission
-  Properties:
-    FunctionName: !GetAtt NotifierFunction.Arn
-    Action: lambda:InvokeFunction
-    Principal: logs.amazonaws.com
-    SourceAccount: !Ref 'AWS::AccountId'
-    SourceArn: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaThatWritesLogs}:*'
+  LambdaPermissions:
+    Type: AWS::Lambda::Permission
+    Properties: 
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref NotifierFunction
+      Principal: logs.amazonaws.com
 
   LogTrigger:
     Type: AWS::Logs::SubscriptionFilter
