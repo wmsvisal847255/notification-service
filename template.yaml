@@ -56,12 +56,6 @@ Resources:
           snsArn: !Ref SNSNotifier
       Runtime: nodejs12.x
       CodeUri: notification-service/
-      Events:
-        CognitoTrigger:
-          Type: Cognito
-          Properties:
-            Trigger: PreTokenGeneration
-            UserPool: !Ref UserPool
 
   LogTrigger:
     Type: AWS::Logs::SubscriptionFilter
