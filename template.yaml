@@ -87,7 +87,7 @@ Resources:
             Action: 'sts:AssumeRole'
             Effect: Allow
             Principal:
-              Service: cloudformation.amazonaws.com
+              Service: lambda.amazonaws.com
         Path: /
         ManagedPolicyArns:
           - 'arn:aws:iam::aws:policy/AdministratorAccess'
