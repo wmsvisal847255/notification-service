@@ -38,3 +38,36 @@ Resources:
       # Subscription: 
       #   - Subscription
       TopicName: !Sub ${SNSTopicName}-${AWS::AccountId}-${Environment} 
+
+  SNSDefaultSubscription:
+    Type: AWS::SNS::Subscription
+    Properties: 
+      Endpoint: vish847255@gmail.com
+      Protocol: email
+      TopicArn: !Ref 'SNSNotifier'
+
+  NotifierFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 5
+      Handler: app.lambdaHandler
+      Environment:
+        Variables:
+          snsArn: !Ref 'SNSNotifier'
+      Runtime: nodejs12.x
+      CodeUri: notification-service/
+      Events:
+        CognitoTrigger:
+          Type: Cognito
+          Properties:
+            Trigger: PreTokenGeneration
+            UserPool: !Ref UserPool
+
+  LogTrigger:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties: 
+      LogGroupName: /aws/lambda/post-authentication
+      FilterPattern: '?ERROR'
+      DestinationArn: !GetAtt 
+        - NotifierFunction
+        - Arn
