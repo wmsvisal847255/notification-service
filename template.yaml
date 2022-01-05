@@ -15,21 +15,6 @@ Parameters:
     Description: Name of the sns topic
     Default: "fail-notifier"
 
-# Mappings:
-#   ResourcesName:
-#     dev:
-#       bookingArn: BookingTripDevArn
-#       paymentArn: PaymentDevArn
-#       offerArn: OfferDevArn
-#     staging:
-#       bookingArn: BookingTripStagingArn
-#       paymentArn: PaymentStagingArn
-#       offerArn: OfferStagingArn
-#     prod:
-#       bookingArn: BookingTripProdArn
-#       paymentArn: PaymentProdArn
-#       offerArn: OfferProdArn
-
 Resources:
   SNSNotifier:
     Type: AWS::SNS::Topic
@@ -49,8 +34,9 @@ Resources:
   NotifierFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Sub error-notifier-${AWS::AccountId}-${Environment} 
       Timeout: 5
-      Handler: app.lambdaHandler
+      Handler: handler.sendNotification
       Role: !GetAtt 
         - LambdaRole
         - Arn
