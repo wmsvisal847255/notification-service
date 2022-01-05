@@ -2,7 +2,7 @@
 var AWS = require('aws-sdk');
 const CONSTANTS = require('./util/constants');
 
-exports.sendNotification = async(event) => {
+exports.sendNotification = async(event,context,callback) => {
     // Create publish parameters
     var params = {
       Message: `Log at ${new Date()} \n------------------------------\n`,
